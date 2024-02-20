@@ -4,8 +4,7 @@ import math
 def softmax(x):
     return (np.exp(x).T / np.sum(np.exp(x), axis=-1)).T
 
-def self_attention(Q,V,K, Mask=None):
-    d_k = K.shape[-1]
+def scaled_dot_product(Q,V,K, d_k, Mask=None):
     scaled = ( np.matmul(Q, K.T)/math.sqrt(d_k))
     if Mask is not None:
         scaled += Mask
@@ -27,8 +26,9 @@ def main():
     mask[mask == 0] = -np.infty
     mask[mask == 1] = 0
 
-    out = self_attention(Q=q,V=v,K=k, Mask=mask)
+    out = scaled_dot_product(Q=q,V=v,K=k, d_k=d_K, Mask=mask)
 
     print(out)
 
-main()
+if __name__ == '__main__':
+    main()
